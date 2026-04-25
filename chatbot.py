@@ -42,17 +42,11 @@ import os
 import speech_recognition as sr
 from groq import Groq
 
-# =========================
-# PAGE CONFIG
-# =========================
 st.set_page_config(page_title="Groq AI Chatbot", page_icon="🤖")
 
 st.title("🤖 Groq AI Chatbot")
 st.caption("Fast • Free • AI powered 🚀")
 
-# =========================
-# LOAD API KEY
-# =========================
 api_key = os.getenv("GROQ_API_KEY")
 
 if not api_key:
@@ -61,15 +55,10 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
-# =========================
-# SESSION STATE
-# =========================
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# =========================
-# TYPING EFFECT
-# =========================
+
 def type_text(text, placeholder):
     typed = ""
     for char in text:
@@ -77,9 +66,6 @@ def type_text(text, placeholder):
         placeholder.markdown(typed)
         time.sleep(0.01)
 
-# =========================
-# VOICE INPUT
-# =========================
 def get_voice():
     r = sr.Recognizer()
     try:
@@ -90,9 +76,6 @@ def get_voice():
     except:
         return None
 
-# =========================
-# AI RESPONSE (UPDATED MODEL)
-# =========================
 def ai_response(user_input):
     try:
         response = client.chat.completions.create(
@@ -106,9 +89,6 @@ def ai_response(user_input):
     except Exception as e:
         return f"⚠️ Error: {str(e)}"
 
-# =========================
-# UI
-# =========================
 col1, col2 = st.columns([4,1])
 
 with col2:
@@ -122,9 +102,7 @@ user_input = st.chat_input("Type your message...")
 if user_input:
     st.session_state.messages.append(("You", user_input))
 
-# =========================
-# DISPLAY CHAT
-# =========================
+
 for sender, msg in st.session_state.messages:
     if sender == "You":
         st.chat_message("user").write(msg)
@@ -133,9 +111,7 @@ for sender, msg in st.session_state.messages:
             placeholder = st.empty()
             type_text(msg, placeholder)
 
-# =========================
-# GENERATE RESPONSE
-# =========================
+
 if st.session_state.messages:
     last_sender, last_msg = st.session_state.messages[-1]
 
